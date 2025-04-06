@@ -1,0 +1,6 @@
+.env
+.langgraph_api
+thinkwiseai-*.jsonthinkwiseai-*.json
+workthinkwiseai-*.json
+__pycache__/
+*.py[cod]
