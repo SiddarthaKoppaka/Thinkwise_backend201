@@ -10,10 +10,11 @@ from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 from collections import defaultdict
 from dateutil import parser
+from src.agent.react_idea_agent import build_react_chat_agent
 from src.auth.dependencies import get_current_user
 from src.auth.routes import router as auth_router
 from src.agent.agent import outer_workflow
-from src.agent.agent_lcel import outer_chain
+from src.agent.react_idea_agent import outer_chain
 from src.utils.parser import parse_ideas_file
 
 app = FastAPI(title="Thinkwise Idea Analysis API", version="1.0.0")
@@ -148,6 +149,47 @@ async def analyze_csv(file: UploadFile = File(...), user_id: str = Depends(get_c
 #     except Exception as e:
 #         traceback.print_exc()
 #         return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+
+@app.post("/chat/idea/{idea_id}")
+async def chat_with_idea(
+    idea_id: str,
+    message: str = Query(..., description="User message to the idea agent"),
+    user_id: str = Depends(get_current_user)
+):
+    try:
+        # Load the idea document from MongoDB
+        idea = await collection.find_one({"idea_id": idea_id, "user_id": user_id})
+        if not idea:
+            raise HTTPException(status_code=404, detail="Idea not found for this user.")
+
+        description = idea.get("description", "")
+        roi = float(idea.get("roi", 0.0))
+        effort = float(idea.get("effort", 1.0))
+
+        # Build chat agent with memory
+        agent = build_react_chat_agent(
+            idea_id=idea_id,
+            idea_description=description,
+            roi=roi,
+            effort=effort,
+            user_id=user_id,
+            mongo_uri=MONGO_URI
+        )
+
+        # Run the agent on user input
+        response = agent.invoke({"input": message})
+        return {"idea_id": idea_id, "response": response}
+
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+
 
 @app.get("/ideas")
 async def get_all_ideas(user_id: str = Depends(get_current_user)):
