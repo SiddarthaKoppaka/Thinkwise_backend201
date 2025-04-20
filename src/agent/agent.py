@@ -91,7 +91,7 @@ You are an experienced project manager. Evaluate the implementation effort for t
 "{description}"
 Consider time (in weeks), required resources, external dependencies, and overall complexity (low/medium/high).
 Return a JSON object with:
-- "eie_score": a float between 0 and 1,
+- "eie_score": a float Strictly between 0 and 1,
 - "reasoning": a brief explanation,
 - "details": a dictionary with "time_needed", "resources", "dependencies", "complexity".
     """
@@ -114,7 +114,7 @@ You are a seasoned business strategist. Evaluate the potential ROI of the follow
 "{description}"
 Consider value creation, user demand, and strategic business impact.
 Return a JSON object with:
-- "roi_score": a float between 0 and 1,
+- "roi_score": a float STRICTLY between 0 and 1,
 - "reasoning": a brief explanation,
 - "details": a dictionary with "value_created", "user_demand", "business_impact".
     """

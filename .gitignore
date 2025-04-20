@@ -4,3 +4,5 @@ thinkwiseai-*.jsonthinkwiseai-*.json
 workthinkwiseai-*.json
 __pycache__/
 *.py[cod]
+.secrets
+node_modules
