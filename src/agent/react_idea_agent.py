@@ -4,7 +4,7 @@ from langchain_google_vertexai import ChatVertexAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
-from langchain.memory.chat_message_histories import MongoDBChatMessageHistory
+from langchain_community.chat_message_histories import MongoDBChatMessageHistory
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
 from dotenv import load_dotenv

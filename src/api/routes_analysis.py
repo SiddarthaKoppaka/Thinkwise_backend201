@@ -1,20 +1,27 @@
 import datetime
 import traceback
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Query
 from fastapi.responses import JSONResponse
-
+from src.core.db import collection
 from src.auth.dependencies import get_current_user
 from src.agent.agent import outer_workflow
 from src.utils.parser import parse_ideas_file
-from src.core.db import collection
 from src.services.idea_service import upsert_analysis, convert_document
-
 
 router = APIRouter(prefix="/analyze", tags=["Analysis"])
 
 @router.post("/csv")
-async def analyze_csv(file: UploadFile = File(...), user_id: str = Depends(get_current_user)):
+async def analyze_csv(
+    file: UploadFile = File(...),
+    user_id: str = Depends(get_current_user),
+    roi_weight: float = Query(0.6, ge=0, le=1, description="Weight for ROI (0 to 1)"),
+    eie_weight: float = Query(0.4, ge=0, le=1, description="Weight for EIE (0 to 1)")
+):
     try:
+        # Validate that weights sum to ~1.0
+        if not (0.99 <= roi_weight + eie_weight <= 1.01):
+            raise HTTPException(status_code=400, detail="ROI and EIE weights must sum to 1.0")
+
         contents = await file.read()
         ideas = parse_ideas_file(file.filename, contents)
         if not ideas:
@@ -24,7 +31,7 @@ async def analyze_csv(file: UploadFile = File(...), user_id: str = Depends(get_c
             "ideas": ideas,
             "processed_ideas": {},
             "feedback": {},
-            "weights": {"roi": 0.6, "eie": 0.4},
+            "weights": {"roi": roi_weight, "eie": eie_weight},
             "summary": {}
         }
 
@@ -46,7 +53,7 @@ async def analyze_csv(file: UploadFile = File(...), user_id: str = Depends(get_c
                 "filename": file.filename
             }
             print(doc)
-            await upsert_analysis(doc, user_id)
+            await upsert_analysis(collection, doc, user_id)
 
         return JSONResponse(content={"status": "ok", "filename": file.filename})
 
