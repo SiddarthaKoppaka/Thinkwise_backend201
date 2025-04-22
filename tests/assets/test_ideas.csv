@@ -1,0 +1,51 @@
+﻿Name,Idea Title,Domain,description,Timestamp
+Pooja,Automated Resume Screening,Data Science,"This project aims to streamline the recruitment process by developing an AI-powered assistant that can parse resumes, evaluate them against job descriptions using NLP, and assign a compatibility score. It will support bulk uploads and integrate with ATS systems. The tool significantly reduces manual screening time and improves hiring accuracy by shortlisting the most relevant candidates.",2023-02-20 9:07:00
+Siksha,Real-Time Budget Tracker,Operations,"A comprehensive real-time financial tracking tool for organizations that provides department-wise budget utilization, forecasting capabilities, and automated alerts for overspending. By integrating with ERP systems, this tracker helps finance teams optimize resource allocation, reduce waste, and enhance fiscal discipline.",2023-02-05 18:19:00
+Ananya,AI-based Ticket Routing,Sales,An intelligent ticket management solution that applies natural language processing to categorize support tickets and machine learning algorithms to route them to the right agent or department based on complexity and expertise. It ensures faster response times and improved customer satisfaction through reduced ticket resolution cycles.,2023-04-28 19:28:00
+Siksha,Personalized Email Campaigns,Customer Support,"This idea involves building a marketing automation platform that leverages user behavior, engagement history, and demographics to craft hyper-personalized email campaigns. It features A/B testing, delivery optimization, and analytics. The result is increased open rates, click-throughs, and conversions with less manual effort.",2023-02-16 23:31:00
+Bhuvana,Chatbot for Customer Queries,Sales,"Develop a virtual customer support assistant that uses NLP to understand and respond to frequently asked questions. The chatbot will be available 24/7, support multiple languages, and escalate to human agents when needed. This leads to lower operational costs and a consistent customer service experience.",2023-02-15 16:08:00
+Ananya,Dynamic Pricing Engine,Legal,"A responsive pricing engine that continuously monitors internal sales data, competitor pricing, and market trends to dynamically set product prices. It includes a rules-based override and supports real-time experimentation to find optimal pricing strategies that boost sales and profitability.",2023-04-27 22:03:00
+Siddartha,Roadmap Prioritization Tool,Operations,"A decision-support tool for product managers that quantifies and visualizes the ROI and implementation effort of proposed features. It integrates with JIRA and survey tools to assess demand, helping teams prioritize impactful items for the roadmap while maintaining strategic alignment.",2023-02-10 20:22:00
+Siksha,Predictive Maintenance System,IT,"Create a system that uses IoT sensor data and historical logs to detect early signs of machine failure and schedule predictive maintenance. The solution minimizes downtime, extends asset life, and reduces repair costs by preventing breakdowns before they occur.",2023-02-09 21:22:00
+Siddartha,Workflow Automation Suite,Customer Support,"Design a modular workflow automation suite enabling business users to automate routine tasks without coding. It includes drag-and-drop workflow builders and pre-built connectors for common tools (e.g., email, spreadsheets, APIs), improving efficiency and reducing errors.",2023-01-28 16:13:00
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,

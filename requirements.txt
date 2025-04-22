@@ -1,5 +1,6 @@
 langchain
 fastapi
+uvicorn
 langgraph
 langchain-ollama
 langchain-community
@@ -10,3 +11,13 @@ langchain-google-vertexai
 python-dotenv
 langchain-tavily
 langchain-google-genai
+motor
+pymongo
+passlib
+python-jose
+pandas
+python-dateutil
+pytest
+httpx
+dotenv
+requests
