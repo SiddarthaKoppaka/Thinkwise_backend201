@@ -1,5 +1,8 @@
 import traceback
 from fastapi import APIRouter, Query, Depends, HTTPException
+from bson import ObjectId
+from bson.errors import InvalidId
+
 from src.auth.dependencies import get_current_user
 from src.agent.react_idea_agent import build_react_chat_agent
 from src.core.db import collection, MONGO_URI
@@ -13,22 +16,30 @@ def safe_float(value, default):
         return default
 
 
-
-@router.post("/idea/{idea_id}")
+@router.post("/idea/{id}")
 async def chat_with_idea(
-    idea_id: str,
+    id: str,
     message: str = Query(..., description="User message to the idea agent"),
-    user_id: str = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user)
 ):
+    # Extract your user’s ID from the JWT 'sub'
+    user_id = current_user["sub"]
+
+    # Convert the path param into a BSON ObjectId
     try:
-        idea = await collection.find_one({"idea_id": idea_id, "user_id": user_id})
+        obj_id = ObjectId(id)
+    except InvalidId:
+        raise HTTPException(status_code=400, detail="Invalid idea ID format.")
+
+    try:
+        # Now fetch by _id and user_id
+        idea = await collection.find_one({"_id": obj_id, "user_id": user_id})
         if not idea:
             raise HTTPException(status_code=404, detail="Idea not found for this user.")
-
+        idea_id = idea["idea_id"]
         description = idea.get("description", "")
         roi = safe_float(idea.get("roi"), 0.0)
         effort = safe_float(idea.get("effort"), 1.0)
-
 
         agent = build_react_chat_agent(
             idea_id=idea_id,
@@ -42,6 +53,9 @@ async def chat_with_idea(
         response = agent.invoke({"input": message})
         return {"idea_id": idea_id, "response": response}
 
+    except HTTPException:
+        # re-raise known HTTP errors
+        raise
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))

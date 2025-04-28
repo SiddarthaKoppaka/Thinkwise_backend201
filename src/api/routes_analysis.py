@@ -13,10 +13,11 @@ router = APIRouter(prefix="/analyze", tags=["Analysis"])
 @router.post("/csv")
 async def analyze_csv(
     file: UploadFile = File(...),
-    user_id: str = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     roi_weight: float = Query(0.6, ge=0, le=1, description="Weight for ROI (0 to 1)"),
     eie_weight: float = Query(0.4, ge=0, le=1, description="Weight for EIE (0 to 1)")
 ):
+    user_sub = current_user["sub"]
     try:
         # Validate that weights sum to ~1.0
         if not (0.99 <= roi_weight + eie_weight <= 1.01):
@@ -39,6 +40,10 @@ async def analyze_csv(
         processed = final_state.get("processed_ideas", {})
 
         for idea_id, analysis in processed.items():
+            roi_score = analysis.get("roi", {}).get("score", 0.0)
+            eie_score = analysis.get("eie", {}).get("score", 0.0)
+            combined_score = roi_weight * roi_score + eie_weight * eie_score
+
             doc = {
                 "idea_id": idea_id,
                 "title": ideas[idea_id].get("title", ""),
@@ -46,14 +51,13 @@ async def analyze_csv(
                 "category": ideas[idea_id].get("category", "Uncategorized"),
                 "description": ideas[idea_id].get("description", ""),
                 "timestamp": ideas[idea_id].get("timestamp", datetime.datetime.utcnow().isoformat()),
-                "score": analysis.get("score", 0),
-                "roi": analysis.get("roi", {}).get("label", "Unknown"),
-                "effort": analysis.get("eie", {}).get("label", "Unknown"),
+                "score": combined_score,
+                "roi": roi_score,
+                "effort": eie_score,
                 "analysis": analysis,
                 "filename": file.filename
-            }
-            print(doc)
-            await upsert_analysis(collection, doc, user_id)
+                }
+            await upsert_analysis(collection, doc, user_sub)
 
         return JSONResponse(content={"status": "ok", "filename": file.filename})
 
