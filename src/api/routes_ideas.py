@@ -2,7 +2,7 @@ import traceback
 import datetime
 from collections import defaultdict
 from dateutil import parser
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from bson import ObjectId
 from bson.errors import InvalidId
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -198,3 +198,30 @@ async def get_chat_history(
         })
 
     return {"chat_history": history}
+
+
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_idea(
+    id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete a single idea by its MongoDB _id."""
+    user_sub = current_user["sub"]
+    try:
+        oid = ObjectId(id)
+    except InvalidId:
+        raise HTTPException(status_code=400, detail="Invalid idea ID format")
+
+    result = await collection.delete_one({"_id": oid, "user_id": user_sub})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Idea not found or not yours")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_all_ideas(
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete *all* ideas belonging to the current user."""
+    user_sub = current_user["sub"]
+    await collection.delete_many({"user_id": user_sub})
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

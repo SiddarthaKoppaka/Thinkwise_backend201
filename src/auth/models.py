@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic.networks import EmailStr
 
 class UserRegister(BaseModel):
     email: str
@@ -26,3 +27,10 @@ class UserOut(Token):
     email: str
     first_name: str
     last_name: str
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+class PasswordReset(BaseModel):
+    token: str
+    new_password: str

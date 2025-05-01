@@ -2,6 +2,8 @@ from passlib.context import CryptContext
 from jose import jwt
 from datetime import datetime, timedelta
 import os
+from src.core.config import settings
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 JWT_SECRET = os.getenv("JWT_SECRET", "dev_secret")
@@ -24,4 +26,13 @@ def create_token(data: dict):
 
 def decode_token(token: str):
     return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+
+def create_password_reset_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
+
+def verify_password_reset_token(token: str):
+    return jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
 
