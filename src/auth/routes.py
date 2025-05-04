@@ -14,7 +14,7 @@ MONGO_URI = os.getenv("MONGO_DETAILS", "mongodb://localhost:27017")
 client = AsyncIOMotorClient(MONGO_URI)
 user_collection = client["thinkwise"]["users"]
 
-@router.post("/register", response_model=TokenResponse)
+@router.post("/register", response_model=Token)
 async def register(user: UserRegister, background_tasks: BackgroundTasks):
     if await user_collection.find_one({"email": user.email}):
         raise HTTPException(status_code=400, detail="Email already registered")
