@@ -21,3 +21,7 @@ tavily-python
 langchain-tavily
 langchain-google-genai
 dotenv
+pandas
+numpy
+python-jose[cryptography]
+fastapi-mail
