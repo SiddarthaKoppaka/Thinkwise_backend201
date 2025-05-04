@@ -200,6 +200,32 @@ async def get_chat_history(
     return {"chat_history": history}
 
 
+@router.get("/lookup")
+async def get_idea_by_idea_id_and_filename(
+    idea_id: str = Query(...),
+    filename: str = Query(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Lookup idea by custom `idea_id` and filename, return full document with MongoDB _id.
+    """
+    user_sub = current_user["sub"]
+
+    doc = await collection.find_one({
+        "idea_id": idea_id,
+        "filename": filename,
+        "user_id": user_sub
+    })
+
+    if not doc:
+        raise HTTPException(status_code=404, detail="Idea not found")
+
+    idea = convert_document(doc)
+    idea["_id"] = str(doc["_id"])  # explicitly include _id in response
+
+    return {"status": "ok", "idea": idea}
+
+
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_idea(
     id: str,
