@@ -130,7 +130,7 @@ async def analyze_single(
         }
         await upsert_analysis(collection, doc, user_sub)
 
-        return {"status": "ok", "idea_id": idea_id, "analysis": analysis}
+        return {"status": "ok", "idea_id": idea_id, "doc" : doc}
 
     except HTTPException:
         raise
