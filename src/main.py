@@ -34,14 +34,3 @@ app.include_router(pwd_router)
 app.include_router(chat_router)
 app.include_router(analysis_router)
 app.include_router(ideas_router)
-
-
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(
-        "src.main:app",
-        host="0.0.0.0",
-        port=port,
-        # reload=True  # only use in dev
-    )
