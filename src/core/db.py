@@ -6,7 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_DETAILS")
-print(MONGO_URI)
+# print(MONGO_URI)
 if not MONGO_URI:
     raise RuntimeError("❌ MONGO_DETAILS not found in environment variables.")
 

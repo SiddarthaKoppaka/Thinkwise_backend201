@@ -34,3 +34,11 @@ class PasswordResetRequest(BaseModel):
 class PasswordReset(BaseModel):
     token: str
     new_password: str
+
+
+class SingleIdea(BaseModel):
+    title: str
+    author: str = ""
+    category: str = "Uncategorized"
+    description: str
+    timestamp: str | None = None
