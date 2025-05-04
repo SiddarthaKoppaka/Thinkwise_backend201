@@ -14,17 +14,23 @@ MONGO_URI = os.getenv("MONGO_DETAILS", "mongodb://localhost:27017")
 client = AsyncIOMotorClient(MONGO_URI)
 user_collection = client["thinkwise"]["users"]
 
-@router.post("/register", response_model=Token)
-async def register(user: UserRegister, background_tasks: BackgroundTasks):
+router.post("/register", response_model=Token)
+async def register(
+    user: UserRegister,
+    background_tasks: BackgroundTasks
+):
+    # 1) check duplicate
     if await user_collection.find_one({"email": user.email}):
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    await user_collection.insert_one({
+    # 2) create user
+    result = await user_collection.insert_one({
         "email": user.email,
         "first_name": user.first_name,
         "last_name": user.last_name,
-        "hashed_password": hash_password(user.password)
+        "hashed_password": hash_password(user.password),
     })
+    user_id = str(result.inserted_id)
 
     # 3) send welcome email in background
     background_tasks.add_task(
@@ -96,12 +102,22 @@ async def register(user: UserRegister, background_tasks: BackgroundTasks):
 """
 )
 
+    # 4) generate token exactly like in /login
+    token = create_token({
+        "sub": user_id,
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+    })
+
     return {
-        "message": "User created",
+        "access_token": token,
+        "token_type": "bearer",
         "user": {
+            "id": user_id,
             "email": user.email,
             "first_name": user.first_name,
-            "last_name": user.last_name
+            "last_name": user.last_name,
         }
     }
 
