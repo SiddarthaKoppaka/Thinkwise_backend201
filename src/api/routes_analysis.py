@@ -1,6 +1,6 @@
 import datetime
 import traceback
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Query
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Query, Body
 from fastapi.responses import JSONResponse
 from src.core.db import collection
 from src.auth.dependencies import get_current_user
