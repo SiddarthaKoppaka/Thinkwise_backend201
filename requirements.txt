@@ -10,3 +10,5 @@ langchain-google-vertexai
 python-dotenv
 langchain-tavily
 langchain-google-genai
+langchain-google-vertexai
+dotenv
