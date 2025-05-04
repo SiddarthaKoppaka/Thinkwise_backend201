@@ -17,13 +17,18 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS
+origins = [
+  "https://thinkwiseai-1w33ej9h0-siddarthakoppakas-projects.vercel.app",
+  "https://thinkwiseai.vercel.app"
+  # add any other domains you need (e.g. localhost for dev)
+]
+
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://thinkwiseai-1w33ej9h0-siddarthakoppakas-projects.vercel.app"],  # e.g. ["http://localhost:3000"]
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+  CORSMiddleware,
+  allow_origins=origins,
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
 )
 
 # Auth
