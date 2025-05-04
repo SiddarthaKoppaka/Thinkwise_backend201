@@ -8,6 +8,7 @@ from src.agent.agent import outer_workflow
 from src.utils.parser import parse_ideas_file
 from src.auth.models import SingleIdea
 from src.services.idea_service import upsert_analysis, convert_document
+import uuid
 
 router = APIRouter(prefix="/analyze", tags=["Analysis"])
 
