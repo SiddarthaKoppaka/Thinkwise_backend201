@@ -206,9 +206,9 @@ async def get_idea_by_idea_id_and_filename(
     filename: str = Query(...),
     current_user: dict = Depends(get_current_user)
 ):
-    """
-    Lookup idea by custom `idea_id` and filename, return full document with MongoDB _id.
-    """
+    print("Lookup Params:", idea_id, filename)
+    print("User Sub:", current_user)
+
     user_sub = current_user["sub"]
 
     doc = await collection.find_one({
@@ -218,10 +218,11 @@ async def get_idea_by_idea_id_and_filename(
     })
 
     if not doc:
+        print("No match found.")
         raise HTTPException(status_code=404, detail="Idea not found")
 
     idea = convert_document(doc)
-    idea["_id"] = str(doc["_id"])  # explicitly include _id in response
+    idea["_id"] = str(doc["_id"])
 
     return {"status": "ok", "idea": idea}
 
