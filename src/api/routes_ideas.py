@@ -212,8 +212,8 @@ async def get_idea_by_idea_id_and_filename(
     user_sub = current_user["sub"]
 
     doc = await collection.find_one({
-        "idea_id": idea_id,
-        "filename": filename,
+        "idea_id": f"{idea_id}",
+        "filename": f"{filename}",
         "user_id": user_sub
     })
 
