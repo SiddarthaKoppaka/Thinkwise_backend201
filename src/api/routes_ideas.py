@@ -203,27 +203,18 @@ async def get_chat_history(
 @router.get("/lookup")
 async def get_idea_by_idea_id_and_filename(
     idea_id: str = Query(...),
-    filename: str = Query(...),
-    current_user: dict = Depends(get_current_user)
+    filename: str = Query(...)
 ):
     print("Lookup Params:", idea_id, filename)
-    print("User Sub:", current_user)
-
-    user_sub = current_user["sub"]
-
     doc = await collection.find_one({
         "idea_id": f"{idea_id}",
-        "filename": f"{filename}",
-        "user_id": user_sub
+        "filename": f"{filename}"
     })
-
     if not doc:
         print("No match found.")
         raise HTTPException(status_code=404, detail="Idea not found")
-
     idea = convert_document(doc)
     idea["_id"] = str(doc["_id"])
-
     return {"status": "ok", "idea": idea}
 
 
