@@ -3,7 +3,7 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from pydantic import BaseModel
 from src.core.config import settings
 from src.core.db     import db
 from src.auth.routes import router as auth_router
@@ -30,6 +30,18 @@ app.add_middleware(
   allow_methods=["*"],
   allow_headers=["*"],
 )
+
+
+class HealthResponse(BaseModel):
+    status: str
+
+@app.get("/health", response_model=HealthResponse, tags=["Health"])
+async def health_check():
+    """
+    Simple liveness probe for Uptime Robot (or any monitor).
+    """
+    return {"status": "ok"}
+
 
 # Auth
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
