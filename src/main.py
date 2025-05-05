@@ -18,8 +18,7 @@ app = FastAPI(
 )
 
 origins = [
-  "https://thinkwiseai-1w33ej9h0-siddarthakoppakas-projects.vercel.app",
-  "https://thinkwiseai.vercel.app"
+  "*"
   # add any other domains you need (e.g. localhost for dev)
 ]
 

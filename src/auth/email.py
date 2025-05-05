@@ -7,6 +7,7 @@ conf = ConnectionConfig(
     MAIL_FROM       = settings.EMAILS_FROM,
     MAIL_SERVER     = settings.SMTP_HOST,
     MAIL_PORT       = settings.SMTP_PORT,
+    MAIL_FROM_NAME = 'ThinkWise AI Team',
 
     # new flag names in fastapi-mail v2+
     MAIL_STARTTLS   = True,   # was MAIL_TLS

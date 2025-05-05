@@ -21,7 +21,9 @@ async def forgot_password(req: PasswordResetRequest, background_tasks: Backgroun
     # 1) Create one-time JWT with short expiry
     token = create_password_reset_token({ "sub": str(user["_id"]) })
 
-    reset_link = f"https://yourapp.com/reset-password?token={token}"
+    frontend_base = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
+    reset_link = f"{frontend_base}/reset-password?token={token}"
+
 
     # 2) Email the link
     background_tasks.add_task(
