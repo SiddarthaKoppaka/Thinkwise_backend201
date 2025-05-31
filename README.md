@@ -1,6 +1,8 @@
 # ThinkWise AI – Backend
 
-This is the **FastAPI backend** powering [ThinkWise AI](#), an AI-driven platform that evaluates business ideas using LangGraph agents, GCP Vertex AI, and external web intelligence.
+This is the **FastAPI backend** powering [ThinkWise AI](https://thinkwiseai.vercel.app/), an AI-driven platform that evaluates business ideas using LangGraph agents, GCP Vertex AI, and external web intelligence.
+
+![image](https://github.com/user-attachments/assets/6c3dbf48-3a9d-4dff-9bb5-9ecc182b309c)
 
 ---
 
@@ -38,8 +40,6 @@ You can directly **include this in your backend's `README.md`**, or even generat
 ## API Endpoints – ThinkWise AI Backend
 
 The backend exposes a RESTful API with endpoints for user authentication, idea analysis, AI chat, and analytics.
-
-> Base URL: `http://localhost:8000` or your deployed URL
 
 ---
 
